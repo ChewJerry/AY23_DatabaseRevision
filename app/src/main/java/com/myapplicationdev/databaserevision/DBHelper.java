@@ -45,13 +45,17 @@ public class DBHelper extends SQLiteOpenHelper {
     public void insertTask(String content, int priority){
         SQLiteDatabase db = this.getWritableDatabase();
         //Todo complete this
-
+        ContentValues values = new ContentValues();
+        values.put(COLUMN_CONTENT, content);
+        values.put(COLUMN_PRIORITY, priority);
+        db.insert(TABLE_NOTE, null, values);
+        db.close();
     }
 
     public ArrayList<String> getNotesInStrings() {
         ArrayList<String> tasks = new ArrayList<String>();
 
-        String selectQuery = "SELECT " + COLUMN_CONTENT  + " FROM " + TABLE_NOTE;
+        String selectQuery = "SELECT " + COLUMN_ID + "," + COLUMN_CONTENT + "," + COLUMN_PRIORITY  + " FROM " + TABLE_NOTE;
 
         SQLiteDatabase db = this.getReadableDatabase();
         Cursor cursor = db.rawQuery(selectQuery, null);
@@ -59,7 +63,11 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 //data retrieval in String
-                //tasks.add(cursor.getString(0));
+                String combinedValue = "ID: " + cursor.getInt(0) + "\nNote: " +
+                        cursor.getString(1) + "\nPriority: Level " +
+                        cursor.getInt(2);
+
+                tasks.add(combinedValue);
             } while (cursor.moveToNext());
         }
 
@@ -83,6 +91,11 @@ public class DBHelper extends SQLiteOpenHelper {
         if (cursor.moveToFirst()) {
             do {
                 //data retrieval in object
+                int id = cursor.getInt(0);
+                String content = cursor.getString(1);
+                int priority = cursor.getInt(2);
+                Note obj = new Note(id, content, priority);
+                notes.add(obj);
 
                 //notes.add(obj);
             } while (cursor.moveToNext());
@@ -94,7 +107,7 @@ public class DBHelper extends SQLiteOpenHelper {
     }
 
     //Edit?
+
     //Delete?
 
 }
-

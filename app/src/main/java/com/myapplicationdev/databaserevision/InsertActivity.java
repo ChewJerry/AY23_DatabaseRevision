@@ -2,6 +2,7 @@ package com.myapplicationdev.databaserevision;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.util.ArrayList;
 
@@ -34,8 +36,11 @@ public class InsertActivity extends AppCompatActivity {
                 DBHelper db = new DBHelper(InsertActivity.this);
 
 
-                db.insertTask();
+                db.insertTask(etContent.getText().toString(),Integer.parseInt(etPriority.getText().toString()));
                 db.close();
+                finish();
+
+                Toast.makeText(InsertActivity.this, "Note added", Toast.LENGTH_SHORT).show();
             }
         });
 
